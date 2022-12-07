@@ -18,9 +18,9 @@ struct HomeView: View {
             
             // Search bar
             if showLocationSearchView {
-                LocationSearchView()
+                LocationSearchView(showLocationSearchView: $showLocationSearchView)
             } else{
-                LocationSearchActivationView()
+                LocationSearchActivationView() // Home Search bar
                     .padding(.top, 72)
                     .onTapGesture {
                         withAnimation(.spring()){
