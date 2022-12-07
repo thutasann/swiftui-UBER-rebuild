@@ -35,12 +35,15 @@ struct LocationSearchView: View {
                         .frame(height: 32)
                         .background(Color(.systemGroupedBackground))
                         .padding(.trailing)
+                        .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6))
                     
                     TextField("Where to", text: $viewModel.queryFragment)
                         .frame(height: 32)
                         .background(Color(.systemGray4))
                         .padding(.trailing)
                         .autocapitalization(.none)
+                        .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6))
+                    
                 }
             }
             .padding(.horizontal)

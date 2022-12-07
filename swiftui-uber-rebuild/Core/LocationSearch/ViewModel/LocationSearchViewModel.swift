@@ -51,11 +51,8 @@ class LocationSearchViewModel : NSObject, ObservableObject {
     func locationSearch(forLocalSearchCompletion localSearch: MKLocalSearchCompletion, completion: @escaping MKLocalSearch.CompletionHandler){
         
         let searchRequest = MKLocalSearch.Request()
-        
         searchRequest.naturalLanguageQuery = localSearch.title.appending(localSearch.subtitle)
-        
         let search = MKLocalSearch(request: searchRequest)
-        
         search.start(completionHandler: completion)
     }
     
