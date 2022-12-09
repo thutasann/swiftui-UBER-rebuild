@@ -14,6 +14,7 @@ struct UberMapViewRepresentable: UIViewRepresentable {
     
     let mapView = MKMapView()
     let locationManager = LocationManager()
+    @Binding var mapState: MapViewState
     @EnvironmentObject var locationViewModel : LocationSearchViewModel
     
     // MARK: - makeUIView
@@ -25,12 +26,23 @@ struct UberMapViewRepresentable: UIViewRepresentable {
         return mapView
     }
     
-    // MARK: - update map UI View
+    // MARK: - UPDATE MAP UI VIEW
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        if let coordinate = locationViewModel.selectedLocationCoordinate{
-            context.coordinator.addAndSelectAnnotation(withCoordinate: coordinate)
-            context.coordinator.configurePolyline(withDestinationCoordinate: coordinate)
+        print("DEBUG: Map State is \(mapState)")
+        
+        switch mapState {
+            case .noInput:
+                context.coordinator.clearMapViewAndRecenterOnUserLocation()
+                break
+            case .searchingForLocation:
+                break
+            case .locationSelected:
+                if let coordinate = locationViewModel.selectedLocationCoordinate{
+                    context.coordinator.addAndSelectAnnotation(withCoordinate: coordinate)
+                    context.coordinator.configurePolyline(withDestinationCoordinate: coordinate)
+                }
         }
+    
     }
       
     // MARK: - makeCoordinator
@@ -48,6 +60,7 @@ extension UberMapViewRepresentable {
         // MARK: - Properties
         let parent: UberMapViewRepresentable
         var userLocationCoordinate: CLLocationCoordinate2D?
+        var currentRegion: MKCoordinateRegion? // To re-center the Map
         
         init(parent: UberMapViewRepresentable){
             self.parent = parent
@@ -62,6 +75,7 @@ extension UberMapViewRepresentable {
                                                longitude: userLocation.coordinate.longitude),
                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
             )
+            self.currentRegion = region
             parent.mapView.setRegion(region, animated: true)
         }
         
@@ -119,6 +133,16 @@ extension UberMapViewRepresentable {
             }
         }
         
+        // MARK: - Clear Map View and Recenter on User Location (Helper Func)
+        func clearMapViewAndRecenterOnUserLocation(){
+            parent.mapView.removeAnnotations(parent.mapView.annotations)
+            parent.mapView.removeOverlays(parent.mapView.overlays)
+            
+            if let currentRegion = currentRegion {
+                parent.mapView.setRegion(currentRegion, animated: true)
+            }
+        }
+         
     }
     
 }
