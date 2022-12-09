@@ -11,6 +11,7 @@ import MapKit
 struct MapViewActionButton: View {
     
     @Binding var mapState : MapViewState
+    @EnvironmentObject var viewModel : LocationSearchViewModel
     
     // MARK: - Button Body
     var body: some View {
@@ -29,7 +30,7 @@ struct MapViewActionButton: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+      
     // MARK: - Action For state
     func actionForState(_ state: MapViewState){
         switch state {
@@ -38,7 +39,8 @@ struct MapViewActionButton: View {
             case .searchingForLocation :
                 mapState = .noInput
             case .locationSelected:
-            mapState = .noInput
+                mapState = .noInput
+                viewModel.selectedLocationCoordinate = nil // to reset the polyline
         }
     }
     
