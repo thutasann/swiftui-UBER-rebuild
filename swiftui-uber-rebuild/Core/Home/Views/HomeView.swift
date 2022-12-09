@@ -12,29 +12,42 @@ struct HomeView: View {
     @State private var mapState = MapViewState.noInput
     
     var body: some View {
-        ZStack (alignment: .top) {
-            UberMapViewRepresentable(mapState: $mapState)
-                .ignoresSafeArea()
+        
+        ZStack (alignment: .bottom) {
             
-            // Search bar
-            if mapState == .searchingForLocation {
-                LocationSearchView(mapState: $mapState) // Location List Screen
-            }
-            else if mapState == .noInput{
-                LocationSearchActivationView() //Home Screen Search Bar
-                    .padding(.top, 72)
-                    .onTapGesture {
-                        withAnimation(.spring()){
-                            mapState = .searchingForLocation
+            // MARK: - HOME SCREEN VIEW
+            ZStack (alignment: .top) {
+                UberMapViewRepresentable(mapState: $mapState)
+                    .ignoresSafeArea()
+                
+                // Search bar
+                if mapState == .searchingForLocation {
+                    LocationSearchView(mapState: $mapState) // Location List Screen
+                }
+                else if mapState == .noInput{
+                    LocationSearchActivationView() //Home Screen Search Bar
+                        .padding(.top, 72)
+                        .onTapGesture {
+                            withAnimation(.spring()){
+                                mapState = .searchingForLocation
+                            }
                         }
-                    }
+                }
+                
+                // Floating Button
+                MapViewActionButton(mapState: $mapState)
+                    .padding(.leading)
+                    .padding(.top, 4)
             }
             
-            // Floating Button
-            MapViewActionButton(mapState: $mapState)
-                .padding(.leading)
-                .padding(.top, 4)
+            // MARK: - RIDE REQUEST VIEW
+            if mapState == .locationSelected{
+                RideRequestView()
+                    .transition(.move(edge: .bottom))
+            }
+            
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
