@@ -99,9 +99,8 @@ struct RideRequestView: View {
                             .padding()
                         }
                         .frame(width: 112, height: 140)
-                        .foregroundColor(type == selectedRideType ? .white : .Color.theme.primaryTextColor)
-                        .background(Color(type == selectedRideType ? .systemBlue : .systemGroupedBackground))
-                        .background(type == selectedRideType ? .blue : Color.theme.secondaryBackgroundColor)
+                        .foregroundColor(type == selectedRideType ? .white : .black)
+                        .background(type == selectedRideType ? .blue: Color.theme.secondaryBackgroundColor)
                         .scaleEffect(type == selectedRideType ? 1.2 : 1.0)
                         .cornerRadius(10)
                         .onTapGesture {
