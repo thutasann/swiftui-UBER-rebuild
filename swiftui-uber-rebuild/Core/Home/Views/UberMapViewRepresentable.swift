@@ -105,7 +105,7 @@ extension UberMapViewRepresentable {
             
             guard let userLocationCoordinate = self.userLocationCoordinate else { return }
             
-            getDestinationRoute(from: userLocationCoordinate, to: coordinate) { route in
+            parent.locationViewModel.getDestinationRoute(from: userLocationCoordinate, to: coordinate) { route in
                 self.parent.mapView.addOverlay(route.polyline)
                 let rect = self.parent.mapView.mapRectThatFits(route.polyline.boundingMapRect, edgePadding: .init(top: 64, left: 32, bottom: 500, right: 32))
                 
@@ -114,29 +114,6 @@ extension UberMapViewRepresentable {
             }
         }
         
-        // MARK: - Get Destination Route (Helper Func)
-        func getDestinationRoute(from userLocation: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D, completion: @escaping(MKRoute) -> Void){
-            
-            // placemarks
-            let userPlacemark = MKPlacemark(coordinate: userLocation)
-            let destPlacemark = MKPlacemark(coordinate: destination)
-            
-            // source/destination requests
-            let request = MKDirections.Request()
-            request.source = MKMapItem(placemark: userPlacemark)
-            request.destination = MKMapItem(placemark: destPlacemark)
-            
-            // direction calculation
-            let direction = MKDirections(request: request)
-            direction.calculate { response, error in
-                if let error = error {
-                    print("DEBUG: Failed to get directoins with error \(error.localizedDescription)")
-                    return
-                }
-                guard let route = response?.routes.first else { return }
-                completion(route)
-            }
-        }
         
         // MARK: - Clear Map View and Recenter on User Location (Helper Func)
         func clearMapViewAndRecenterOnUserLocation(){
