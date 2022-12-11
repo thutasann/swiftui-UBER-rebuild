@@ -54,8 +54,11 @@ struct RideRequestView: View {
                     }
                     .padding(.bottom, 10)
                     HStack{
-                        Text("Coffee Lovers")
-                            .font(.system(size: 16, weight: .semibold))
+                        
+                        if let location = locationViewModel.selectedUberLocaton{
+                            Text(location.title)
+                                .font(.system(size: 16, weight: .semibold))
+                        }
                         
                         Spacer()
                         

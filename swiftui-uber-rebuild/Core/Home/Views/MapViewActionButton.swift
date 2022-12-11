@@ -40,7 +40,7 @@ struct MapViewActionButton: View {
                 mapState = .noInput
             case .locationSelected:
                 mapState = .noInput
-                viewModel.selectedLocationCoordinate = nil // to reset the polyline
+                viewModel.selectedUberLocaton = nil // to reset the polyline
         }
     }
     
